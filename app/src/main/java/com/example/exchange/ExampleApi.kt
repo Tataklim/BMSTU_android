@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
-private val API_URL = "https://min-api.cryptocompare.com"
+private val API_URL = "https://min-api.cryptocompare.com/"
 
 val moshi = Moshi.Builder()
     .addLast(KotlinJsonAdapterFactory())
@@ -18,7 +18,7 @@ val retrofit = Retrofit.Builder()
     .build()
 
 interface ExampleApiService {
-    @GET("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,JPY,EUR")
+    @GET("price?fsym=BTC&tsyms=EUR")
     suspend fun getData(): List<ExampleData>
 }
 

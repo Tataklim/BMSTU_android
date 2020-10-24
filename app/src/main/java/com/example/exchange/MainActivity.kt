@@ -20,19 +20,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewAdapter: com.example.exchange.ListAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val viewModel: HostViewModel by lazy {
-        ViewModelProvider(this).get(HostViewModel::class.java)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val myDataSet: List<Dog> = listOf(d0, d1, d2, d3, d4, d5, d6, d7)
+        // n days!!!
+
+        val myDataSet: List<ExampleData> = listOf(ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
+            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
+            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
+            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
+            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
+            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()))
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ListAdapter { item -> itemClicked(item) }
-//        viewAdapter.data = myDataSet
+        viewAdapter.data = myDataSet
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewId).apply {
             setHasFixedSize(true)
@@ -66,6 +69,10 @@ class MainActivity : AppCompatActivity() {
             "If you want to take this cutie" + "\n" + "Call +7 (916) 509-38-42",
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    private val viewModel: HostViewModel by lazy {
+        ViewModelProvider(this).get(HostViewModel::class.java)
     }
 
 }

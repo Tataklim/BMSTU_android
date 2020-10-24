@@ -7,12 +7,10 @@ import java.lang.Exception
 
 class HostViewModel: ViewModel() {
 
-    private lateinit var binding: ActivityMainBinding
-
     private val _response = MutableLiveData<String>()
 
     val response: LiveData<String>
-    get() = _response
+        get() = _response
 
     init {
         loadDataFromInternet()
@@ -29,5 +27,7 @@ class HostViewModel: ViewModel() {
             }
         }
     }
+
+
 
 }
