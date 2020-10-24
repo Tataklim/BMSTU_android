@@ -16,6 +16,10 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    private val viewModel: HostViewModel by lazy {
+        ViewModelProvider(this).get(HostViewModel::class.java)
+    }
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: com.example.exchange.ListAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -26,12 +30,17 @@ class MainActivity : AppCompatActivity() {
 
         // n days!!!
 
+//        val myDataSet: List<ExampleData> = ExampleApi.retrofitService.getData()
+
         val myDataSet: List<ExampleData> = listOf(ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
             ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
             ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
             ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
             ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
+            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
+            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
             ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()))
+
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ListAdapter { item -> itemClicked(item) }
@@ -69,10 +78,6 @@ class MainActivity : AppCompatActivity() {
             "If you want to take this cutie" + "\n" + "Call +7 (916) 509-38-42",
             Toast.LENGTH_LONG
         ).show()
-    }
-
-    private val viewModel: HostViewModel by lazy {
-        ViewModelProvider(this).get(HostViewModel::class.java)
     }
 
 }
