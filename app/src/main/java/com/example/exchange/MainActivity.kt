@@ -1,20 +1,24 @@
 package com.example.exchange
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exchange.databinding.ActivityMainBinding
-import org.json.JSONObject
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedPref: SharedPreferences
 
     private val viewModel: HostViewModel by lazy {
         ViewModelProvider(this).get(HostViewModel::class.java)
@@ -26,7 +30,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        sharedPref = this.getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+        val defaultPeriodValue = resources.getInteger(R.integer.preference_file_key_period_default)
+        val defaultCurrencyValue = resources.getString(R.string.preference_file_key_currency_default)
+        val period = sharedPref.getInt(getString(R.string.preference_file_key_period), defaultPeriodValue)
+        val currency = sharedPref.getString(getString(R.string.preference_file_key_period), defaultCurrencyValue)
 
         // n days!!!
 
@@ -59,13 +71,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val item_id = item.itemId
-        if (item_id == R.id.action_settings) {
-            //
+        val itemId = item.itemId
+        if (itemId == R.id.action_settings) {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
             return true
         }
 
-        if (item_id == R.id.update_settings) {
+        if (itemId == R.id.update_settings) {
             recreate()
             return true
         }
