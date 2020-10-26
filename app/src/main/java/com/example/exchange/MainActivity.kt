@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
@@ -36,6 +35,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var period by Delegates.notNull<Int>()
     private var currency by Delegates.notNull<String>()
+    private var crypt by Delegates.notNull<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -197,6 +197,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             else -> {
                 Log.v("KEK WHAT", "Error")
             }
+//            resources.getString(R.string.preference_file_key_currency) -> {
+//                val defaultCryptoValue =
+//                    resources.getString(R.string.btc)
+//                crypt = sharedPref.getString(key, defaultCryptoValue).toString()
+//                Log.v("KEK CRYPTO", crypt)
+//            }
+//            else -> {
+//                Log.v("KEK WHAT", "Error")
+//            }
         }
     }
 }

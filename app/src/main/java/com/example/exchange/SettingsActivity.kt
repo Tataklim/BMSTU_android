@@ -1,15 +1,15 @@
 package com.example.exchange
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.*
+import androidx.fragment.app.FragmentManager
+import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.example.exchange.databinding.SettingsActivityBinding
 
 
@@ -26,6 +26,7 @@ class SettingsActivity : AppCompatActivity() {
 
         setContentView(R.layout.settings_activity)
 
+
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -34,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
@@ -41,7 +43,8 @@ class SettingsActivity : AppCompatActivity() {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
             val sharedPref = this.requireActivity().getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE
+            )
 
             val prefPeriod: EditTextPreference = preferenceManager.findPreference("period")!!
             val prefCurrency: ListPreference = preferenceManager.findPreference("currency")!!
@@ -49,9 +52,13 @@ class SettingsActivity : AppCompatActivity() {
             prefPeriod.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _, newValue ->
                     if (newValue.toString().toIntOrNull() != null && newValue.toString().toInt() > 0) {
-                        sharedPref.edit().putInt(getString(R.string.preference_file_key_period), newValue.toString().toInt()).apply()
+                        sharedPref.edit().putInt(
+                            getString(R.string.preference_file_key_period),
+                            newValue.toString().toInt()
+                        ).apply()
                     } else {
-                        Toast.makeText(context, "Количество дней должно быть положительным", Toast.LENGTH_LONG
+                        Toast.makeText(
+                            context, "Количество дней должно быть положительным", Toast.LENGTH_LONG
                         ).show()
                     }
                     newValue.toString().toIntOrNull() != null && newValue.toString().toInt() > 0
@@ -59,7 +66,10 @@ class SettingsActivity : AppCompatActivity() {
 
             prefCurrency.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _, newValue ->
-                    sharedPref.edit().putString(getString(R.string.preference_file_key_currency), newValue.toString()).apply()
+                    sharedPref.edit().putString(
+                        getString(R.string.preference_file_key_currency),
+                        newValue.toString()
+                    ).apply()
                     true
                 }
         };
