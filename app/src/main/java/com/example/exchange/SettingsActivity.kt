@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.EditTextPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
+import androidx.preference.*
 import com.example.exchange.databinding.SettingsActivityBinding
 
 
@@ -43,7 +41,7 @@ class SettingsActivity : AppCompatActivity() {
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
             val prefPeriod: EditTextPreference = preferenceManager.findPreference("period")!!
-            val prefCurrency: EditTextPreference = preferenceManager.findPreference("currency")!!
+            val prefCurrency: ListPreference = preferenceManager.findPreference("currency")!!
 
             prefPeriod.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _, newValue ->
@@ -56,10 +54,6 @@ class SettingsActivity : AppCompatActivity() {
             prefCurrency.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _, newValue ->
                     sharedPref.edit().putString(getString(R.string.preference_file_key_currency), newValue.toString()).apply()
-                    val currency = sharedPref.getString(getString(R.string.preference_file_key_currency), "rub")
-                    if (currency != null) {
-                        Log.v("kek", currency)
-                    }
                     true
                 }
         };
