@@ -63,15 +63,6 @@ class SettingsActivity : AppCompatActivity() {
                     }
                     newValue.toString().toIntOrNull() != null && newValue.toString().toInt() > 0
                 }
-
-            prefCurrency.onPreferenceChangeListener =
-                Preference.OnPreferenceChangeListener { _, newValue ->
-                    sharedPref.edit().putString(
-                        getString(R.string.preference_file_key_currency),
-                        newValue.toString()
-                    ).apply()
-                    true
-                }
         };
     }
 }

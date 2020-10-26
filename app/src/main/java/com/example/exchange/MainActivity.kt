@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -18,9 +17,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exchange.databinding.ActivityMainBinding
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlin.properties.Delegates
 
@@ -45,42 +42,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         setUrlEventListener()
 
+        setCryptoButtonEventListener()
+
         getAndSetDataForRecyclerView();
-
-        val popupMenu = PopupMenu(this, binding.buttonId)
-        popupMenu.inflate(R.menu.popupmenu)
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu1 -> {
-                    binding.buttonId.text = "Bitcoin"
-                    true
-                }
-                R.id.menu2 -> {
-                    binding.buttonId.text = "Ethereum"
-                    true
-                }
-                R.id.menu3 -> {
-                    binding.buttonId.text = "Litecoin"
-                    true
-                }
-                R.id.menu4 -> {
-                    binding.buttonId.text = "Chainlink"
-                    true
-                }
-                R.id.menu5 -> {
-                    binding.buttonId.text = "Bitcoin Cash"
-                    true
-                }
-
-                else -> false
-            }
-        }
-
-        binding.buttonId.setOnClickListener {
-            popupMenu.show()
-        }
-
-//        val myDataSet: List<ExampleData> = ExampleApi.retrofitService.getData()
     }
 
     override fun onDestroy() {
@@ -118,11 +82,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val defaultPeriodValue = resources.getInteger(R.integer.preference_file_key_period_default)
         val defaultCurrencyValue =
             resources.getString(R.string.preference_file_key_currency_default)
+        val defaultCryptoValue =
+            resources.getString(R.string.preference_file_key_crypto_default)
+
         period =
             sharedPref.getInt(getString(R.string.preference_file_key_period), defaultPeriodValue)
+
         currency = sharedPref.getString(
             getString(R.string.preference_file_key_currency),
             defaultCurrencyValue
+        ).toString()
+
+        crypt = sharedPref.getString(
+            getString(R.string.preference_file_key_crypto),
+            defaultCryptoValue
         ).toString()
     }
 
@@ -140,7 +113,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val dataSet: MutableList<DayInfo> = mutableListOf()
 
         val apiService = ApiService.create()
-        apiService.search("BTC", "USD", "10")
+        apiService.search(crypt, currency, period.toString())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({
@@ -179,7 +152,60 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     "MIN",
             Toast.LENGTH_LONG
         ).show()
-        Log.v("KEK", "itemClicked")
+    }
+
+    private fun setCryptoButtonEventListener() {
+        val popupMenu = PopupMenu(this, binding.buttonId)
+        popupMenu.inflate(R.menu.popupmenu)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu1 -> {
+                    binding.buttonId.text = "Bitcoin"
+                    sharedPref.edit().putString(
+                        getString(R.string.preference_file_key_crypto),
+                        getString(R.string.btc)
+                    ).apply()
+                    true
+                }
+                R.id.menu2 -> {
+                    binding.buttonId.text = "Ethereum"
+                    sharedPref.edit().putString(
+                        getString(R.string.preference_file_key_crypto),
+                        getString(R.string.eth)
+                    ).apply()
+                    true
+                }
+                R.id.menu3 -> {
+                    binding.buttonId.text = "Litecoin"
+                    sharedPref.edit().putString(
+                        getString(R.string.preference_file_key_crypto),
+                        getString(R.string.ltc)
+                    ).apply()
+                    true
+                }
+                R.id.menu4 -> {
+                    binding.buttonId.text = "Chainlink"
+                    sharedPref.edit().putString(
+                        getString(R.string.preference_file_key_crypto),
+                        getString(R.string.link)
+                    ).apply()
+                    true
+                }
+                R.id.menu5 -> {
+                    binding.buttonId.text = "Bitcoin Cash"
+                    sharedPref.edit().putString(
+                        getString(R.string.preference_file_key_crypto),
+                        getString(R.string.bch)
+                    ).apply()
+                    true
+                }
+
+                else -> false
+            }
+        }
+        binding.buttonId.setOnClickListener {
+            popupMenu.show()
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -187,21 +213,24 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             resources.getString(R.string.preference_file_key_period) -> {
                 val defaultPeriodValue =
                     resources.getInteger(R.integer.preference_file_key_period_default)
-                period = sharedPref.getInt(key, defaultPeriodValue)
+                period = sharedPref.getInt(key, defaultPeriodValue) - 1
+                getAndSetDataForRecyclerView()
                 Log.v("KEK PERIOD", period.toString())
             }
             resources.getString(R.string.preference_file_key_currency) -> {
                 val defaultCurrencyValue =
                     resources.getString(R.string.preference_file_key_currency_default)
                 currency = sharedPref.getString(key, defaultCurrencyValue).toString()
+                getAndSetDataForRecyclerView()
                 Log.v("KEK CURRENCY", currency)
             }
-//            resources.getString(R.string.preference_file_key_crypto) -> {
-//                val defaultCryptoValue =
-//                    resources.getString(R.string.preference_file_key_crypto_default)
-//                crypt = sharedPref.getString(key, defaultCryptoValue).toString()
-//                Log.v("KEK CRYPTO", crypt)
-//            }
+            resources.getString(R.string.preference_file_key_crypto) -> {
+                val defaultCryptoValue =
+                    resources.getString(R.string.preference_file_key_crypto_default)
+                crypt = sharedPref.getString(key, defaultCryptoValue).toString()
+                getAndSetDataForRecyclerView()
+                Log.v("KEK CRYPTO", crypt)
+            }
             else -> {
                 Log.v("KEK WHAT", "Error")
             }
