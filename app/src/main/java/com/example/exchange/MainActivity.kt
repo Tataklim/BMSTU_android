@@ -194,18 +194,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 currency = sharedPref.getString(key, defaultCurrencyValue).toString()
                 Log.v("KEK CURRENCY", currency)
             }
-            else -> {
-                Log.v("KEK WHAT", "Error")
-            }
-//            resources.getString(R.string.preference_file_key_currency) -> {
+//            resources.getString(R.string.preference_file_key_crypto) -> {
 //                val defaultCryptoValue =
-//                    resources.getString(R.string.btc)
+//                    resources.getString(R.string.preference_file_key_crypto_default)
 //                crypt = sharedPref.getString(key, defaultCryptoValue).toString()
 //                Log.v("KEK CRYPTO", crypt)
 //            }
-//            else -> {
-//                Log.v("KEK WHAT", "Error")
-//            }
+            else -> {
+                Log.v("KEK WHAT", "Error")
+            }
         }
     }
 }
