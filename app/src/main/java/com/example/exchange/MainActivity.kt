@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        binding.buttonId.setOnClickListener{
+        binding.buttonId.setOnClickListener {
             popupMenu.show()
         }
 
@@ -166,16 +166,25 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun itemClicked(item: String) {
 //        Toast.makeText(
 //            this,
-//            "If you want to take this cutie" + "\n" + "Call +7 (916) 509-38-42",
+//            item,
 //            Toast.LENGTH_LONG
 //        ).show()
+        Toast.makeText(
+            this,
+            //TODO: вместо item максимальное и минимальное значение этой валюты за день
+            item.substring(0, 3) + " for " + item.substring(3, 4) + "\n" + //поправить конечный индекс на длину даты
+                    "MAX" + "\n" +
+                    "MIN",
+            Toast.LENGTH_LONG
+        ).show()
         Log.v("KEK", "itemClicked")
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
             resources.getString(R.string.preference_file_key_period) -> {
-                val defaultPeriodValue = resources.getInteger(R.integer.preference_file_key_period_default)
+                val defaultPeriodValue =
+                    resources.getInteger(R.integer.preference_file_key_period_default)
                 period = sharedPref.getInt(key, defaultPeriodValue)
                 Log.v("KEK PERIOD", period.toString())
             }

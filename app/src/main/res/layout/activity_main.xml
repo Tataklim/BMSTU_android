@@ -31,7 +31,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewId"
             android:layout_width="match_parent"
-            android:layout_height="395dp"
+            android:layout_height="424dp"
             android:scrollbars="vertical">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -42,8 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="center"
-            android:padding="16dp"
+            android:padding="2dp"
             android:text="https://min-api.cryptocompare.com/"
+            android:textColor="#4053FF"
             android:textSize="20sp" />
 
     </LinearLayout>
