@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -46,6 +47,39 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         val dataSet: List<ExampleData> = getDataForRecyclerView();
         setRecyclerViewData(dataSet);
+
+        val popupMenu = PopupMenu(this, binding.buttonId)
+        popupMenu.inflate(R.menu.popupmenu)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu1 -> {
+                    binding.buttonId.text = "Bitcoin"
+                    true
+                }
+                R.id.menu2 -> {
+                    binding.buttonId.text = "Ethereum"
+                    true
+                }
+                R.id.menu3 -> {
+                    binding.buttonId.text = "Litecoin"
+                    true
+                }
+                R.id.menu4 -> {
+                    binding.buttonId.text = "Chainlink"
+                    true
+                }
+                R.id.menu5 -> {
+                    binding.buttonId.text = "Bitcoin Cash"
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        binding.buttonId.setOnClickListener{
+            popupMenu.show()
+        }
 
 //        val myDataSet: List<ExampleData> = ExampleApi.retrofitService.getData()
     }
