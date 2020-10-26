@@ -8,7 +8,7 @@
         android:orderInCategory="1">
     </item>
     <item android:id="@+id/update_settings"
-        android:title="Upgate"
+        android:title="Update"
         app:showAsAction="ifRoom"
         android:orderInCategory="2">
     </item>

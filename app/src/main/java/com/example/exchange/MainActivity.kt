@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var period by Delegates.notNull<Int>()
     private var currency by Delegates.notNull<String>()
+    private var crypt by Delegates.notNull<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +46,39 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         setUrlEventListener()
 
         getAndSetDataForRecyclerView();
+
+        val popupMenu = PopupMenu(this, binding.buttonId)
+        popupMenu.inflate(R.menu.popupmenu)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu1 -> {
+                    binding.buttonId.text = "Bitcoin"
+                    true
+                }
+                R.id.menu2 -> {
+                    binding.buttonId.text = "Ethereum"
+                    true
+                }
+                R.id.menu3 -> {
+                    binding.buttonId.text = "Litecoin"
+                    true
+                }
+                R.id.menu4 -> {
+                    binding.buttonId.text = "Chainlink"
+                    true
+                }
+                R.id.menu5 -> {
+                    binding.buttonId.text = "Bitcoin Cash"
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        binding.buttonId.setOnClickListener {
+            popupMenu.show()
+        }
 
 //        val myDataSet: List<ExampleData> = ExampleApi.retrofitService.getData()
     }
@@ -132,9 +168,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun itemClicked(item: String) {
 //        Toast.makeText(
 //            this,
-//            "If you want to take this cutie" + "\n" + "Call +7 (916) 509-38-42",
+//            item,
 //            Toast.LENGTH_LONG
 //        ).show()
+        Toast.makeText(
+            this,
+            //TODO: вместо item максимальное и минимальное значение этой валюты за день
+            item.substring(0, 3) + " for " + item.substring(3, 4) + "\n" + //поправить конечный индекс на длину даты
+                    "MAX" + "\n" +
+                    "MIN",
+            Toast.LENGTH_LONG
+        ).show()
         Log.v("KEK", "itemClicked")
     }
 
@@ -152,6 +196,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 currency = sharedPref.getString(key, defaultCurrencyValue).toString()
                 Log.v("KEK CURRENCY", currency)
             }
+//            resources.getString(R.string.preference_file_key_crypto) -> {
+//                val defaultCryptoValue =
+//                    resources.getString(R.string.preference_file_key_crypto_default)
+//                crypt = sharedPref.getString(key, defaultCryptoValue).toString()
+//                Log.v("KEK CRYPTO", crypt)
+//            }
             else -> {
                 Log.v("KEK WHAT", "Error")
             }

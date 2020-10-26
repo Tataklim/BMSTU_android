@@ -22,6 +22,16 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/crypto_header">
+        <ListPreference
+            app:defaultValue="btc"
+            app:entries="@array/crypto_entries"
+            app:entryValues="@array/crypto_values"
+            app:key="crypto"
+            app:title="@string/crypto_title"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
 <!--    <PreferenceCategory app:title="@string/sync_header">-->
 <!--        <SwitchPreferenceCompat-->
 <!--            app:key="sync"-->
