@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ListAdapter(private val clickListener: (String) -> Unit) : RecyclerView.Adapter<ListAdapter.ElemViewHolder> () {
-    var data = listOf<ExampleData> ()
+    var data = mutableListOf<DayInfo> ()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -22,7 +22,7 @@ class ListAdapter(private val clickListener: (String) -> Unit) : RecyclerView.Ad
 
     override fun onBindViewHolder(holder: ElemViewHolder, position: Int) {
         val item = data[position]
-        holder.setDataAndListener(item.date, item.cryptoCost, item.currency, clickListener)
+        holder.setDataAndListener(item.open, item.high, item.low, clickListener)
     }
 
     class ElemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)  {

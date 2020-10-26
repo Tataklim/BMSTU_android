@@ -4,30 +4,28 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exchange.databinding.ActivityMainBinding
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPref: SharedPreferences
-
-    private val viewModel: HostViewModel by lazy {
-        ViewModelProvider(this).get(HostViewModel::class.java)
-    }
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: com.example.exchange.ListAdapter
@@ -44,8 +42,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         setUrlEventListener()
 
-        val dataSet: List<ExampleData> = getDataForRecyclerView();
-        setRecyclerViewData(dataSet);
+        getAndSetDataForRecyclerView();
 
 //        val myDataSet: List<ExampleData> = ExampleApi.retrofitService.getData()
     }
@@ -103,21 +100,24 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    private fun getDataForRecyclerView(): List<ExampleData> {
-        val dataSet: List<ExampleData> = listOf(
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString()),
-            ExampleData(viewModel.response.toString(), "hello", viewModel.response.toString())
-        )
+    private fun getAndSetDataForRecyclerView(): MutableList<DayInfo> {
+        val dataSet: MutableList<DayInfo> = mutableListOf()
+
+        val apiService = ApiService.create()
+        apiService.search("BTC", "USD", "10")
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe ({
+                    result ->
+                result.Data.List.map { elem -> dataSet.add(elem) }
+                setRecyclerViewData(dataSet);
+            }, { error ->
+                error.printStackTrace()
+            })
         return dataSet
     }
 
-    private fun setRecyclerViewData(dataSet: List<ExampleData>) {
+    private fun setRecyclerViewData(dataSet: MutableList<DayInfo>) {
         viewManager = LinearLayoutManager(this)
         viewAdapter = ListAdapter { item -> itemClicked(item) }
         viewAdapter.data = dataSet
@@ -141,7 +141,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
             resources.getString(R.string.preference_file_key_period) -> {
-                val defaultPeriodValue = resources.getInteger(R.integer.preference_file_key_period_default)
+                val defaultPeriodValue =
+                    resources.getInteger(R.integer.preference_file_key_period_default)
                 period = sharedPref.getInt(key, defaultPeriodValue)
                 Log.v("KEK PERIOD", period.toString())
             }
