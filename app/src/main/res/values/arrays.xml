@@ -17,19 +17,4 @@
         <item>JPY</item>
     </string-array>
 
-        <string-array name="crypto_entries">
-            <item>BTC</item>
-            <item>ETH</item>
-            <item>LTC</item>
-            <item>LINK</item>
-            <item>BCH</item>
-        </string-array>
-
-        <string-array name="crypto_values">
-            <item>BTC</item>
-            <item>ETH</item>
-            <item>LTC</item>
-            <item>LINK</item>
-            <item>BCH</item>
-        </string-array>
 </resources>

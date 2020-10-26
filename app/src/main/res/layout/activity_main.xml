@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="bitcoin"
+            android:text="@string/bitcoin"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="2dp"
-                android:text="Date"
+                android:text="@string/date"
                 android:textColor="#5A5A5A"
                 android:textSize="15sp" />
 
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="2dp"
-                android:text="Cost"
+                android:text="@string/cost"
                 android:textColor="#5A5A5A"
                 android:textSize="15sp"/>
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="2dp"
-                android:text="Currency"
+                android:text="@string/currency"
                 android:textColor="#5A5A5A"
                 android:textSize="15sp"/>
 
@@ -68,7 +68,7 @@
             android:layout_margin="16dp"
             android:gravity="center"
             android:padding="2dp"
-            android:text="https://min-api.cryptocompare.com/"
+            android:text="@string/https_min_api_cryptocompare_com"
             android:textColor="#4053FF"
             android:textSize="20sp" />
 

@@ -3,13 +3,10 @@ package com.example.exchange
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.reactivex.Observable
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -21,12 +18,6 @@ interface ApiService {
         @Query("limit") period: String
     ): Observable<ExampleData>
 
-//    @GET ("data/v4/all/exchanges")
-//    fun temp(): Observable<>
-
-    /**
-     * Companion object to create the ApiService
-     */
     companion object Factory {
         private val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())

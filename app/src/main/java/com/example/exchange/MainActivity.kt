@@ -109,27 +109,26 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    private fun getAndSetDataForRecyclerView(): MutableList<DayInfo> {
+    private fun getAndSetDataForRecyclerView() {
         val dataSet: MutableList<DayInfo> = mutableListOf()
 
         val apiService = ApiService.create()
         apiService.search(crypt, currency, period.toString())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe ({
-                    result ->
+            .subscribe({ result ->
                 result.Data.List.map { elem -> dataSet.add(elem) }
                 setRecyclerViewData(dataSet);
             }, { error ->
                 error.printStackTrace()
             })
-        return dataSet
     }
 
     private fun setRecyclerViewData(dataSet: MutableList<DayInfo>) {
         viewManager = LinearLayoutManager(this)
         viewAdapter = ListAdapter { item -> itemClicked(item) }
         viewAdapter.data = dataSet
+        viewAdapter.currency = currency
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewId).apply {
             setHasFixedSize(true)
@@ -138,18 +137,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    private fun itemClicked(item: String) {
-//        Toast.makeText(
-//            this,
-//            item,
-//            Toast.LENGTH_LONG
-//        ).show()
+    private fun itemClicked(item: DayInfo) {
         Toast.makeText(
             this,
-            //TODO: вместо item максимальное и минимальное значение этой валюты за день
-            item.substring(0, 3) + " for " + item.substring(3, 4) + "\n" + //поправить конечный индекс на длину даты
-                    "MAX" + "\n" +
-                    "MIN",
+            "OPEN: " + item.open + "\n" +
+                    "CLOSE: " + item.close + "\n" +
+                    "HIGH: " + item.high + "\n" +
+                    "LOW: " + item.low + "\n",
             Toast.LENGTH_LONG
         ).show()
     }
@@ -213,23 +207,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             resources.getString(R.string.preference_file_key_period) -> {
                 val defaultPeriodValue =
                     resources.getInteger(R.integer.preference_file_key_period_default)
-                period = sharedPref.getInt(key, defaultPeriodValue) - 1
+                period = sharedPref.getInt(key, defaultPeriodValue)
                 getAndSetDataForRecyclerView()
-                Log.v("KEK PERIOD", period.toString())
             }
             resources.getString(R.string.preference_file_key_currency) -> {
                 val defaultCurrencyValue =
                     resources.getString(R.string.preference_file_key_currency_default)
                 currency = sharedPref.getString(key, defaultCurrencyValue).toString()
                 getAndSetDataForRecyclerView()
-                Log.v("KEK CURRENCY", currency)
             }
             resources.getString(R.string.preference_file_key_crypto) -> {
                 val defaultCryptoValue =
                     resources.getString(R.string.preference_file_key_crypto_default)
                 crypt = sharedPref.getString(key, defaultCryptoValue).toString()
                 getAndSetDataForRecyclerView()
-                Log.v("KEK CRYPTO", crypt)
             }
             else -> {
                 Log.v("KEK WHAT", "Error")

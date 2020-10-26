@@ -3,16 +3,19 @@ package com.example.exchange
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
 
-class ListAdapter(private val clickListener: (String) -> Unit) : RecyclerView.Adapter<ListAdapter.ElemViewHolder> () {
+class ListAdapter(private val clickListener: (DayInfo) -> Unit) : RecyclerView.Adapter<ListAdapter.ElemViewHolder> () {
     var data = mutableListOf<DayInfo> ()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    var currency = String ()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElemViewHolder {
         return ElemViewHolder.from(parent)
@@ -22,19 +25,31 @@ class ListAdapter(private val clickListener: (String) -> Unit) : RecyclerView.Ad
 
     override fun onBindViewHolder(holder: ElemViewHolder, position: Int) {
         val item = data[position]
-        holder.setDataAndListener(item.open, item.high, item.low, clickListener)
+        holder.setDataAndListener(item, currency, clickListener)
     }
 
-    class ElemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)  {
+    class ElemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
         private val dateViewRow: TextView = itemView.findViewById(R.id.dateId)
         private val textViewRow: TextView = itemView.findViewById(R.id.textId)
         private val currencyViewRow : TextView = itemView.findViewById(R.id.currencyId)
 
-        fun setDataAndListener(item : String, costId : String, currencyItem: String, clickListener: (String) -> Unit) {
-            dateViewRow.text = item
-            textViewRow.text = costId
-            currencyViewRow.text=currencyItem
-            itemView.setOnClickListener{clickListener(item)}
+        fun setDataAndListener(
+            data: DayInfo,
+            currency: String,
+            clickListener: (DayInfo) -> Unit
+        ) {
+            dateViewRow.text = getDateTime(data.time)
+            textViewRow.text = data.high
+            currencyViewRow.text= currency
+            itemView.setOnClickListener{
+                clickListener(data)
+            }
+        }
+
+        private fun getDateTime(s: String): String {
+            val sdf = SimpleDateFormat("yyyy/MM/dd")
+            val netDate = Date(s.toLong() * 1000)
+            return sdf.format(netDate)
         }
 
         companion object {
@@ -43,7 +58,11 @@ class ListAdapter(private val clickListener: (String) -> Unit) : RecyclerView.Ad
                 val layoutIdForListItem = R.layout.list_item_1
                 val inflater = LayoutInflater.from(context)
                 val shouldAttachToParentImmediately = false
-                val view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately)
+                val view = inflater.inflate(
+                    layoutIdForListItem,
+                    parent,
+                    shouldAttachToParentImmediately
+                )
                 return ElemViewHolder(view)
             }
         }

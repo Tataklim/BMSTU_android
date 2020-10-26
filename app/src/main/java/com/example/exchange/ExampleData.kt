@@ -1,7 +1,5 @@
 package com.example.exchange
 
-import com.google.gson.annotations.SerializedName
-
 import com.squareup.moshi.Json
 
 data class ExampleData(
