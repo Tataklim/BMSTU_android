@@ -47,6 +47,9 @@ class SettingsActivity : AppCompatActivity() {
                 Preference.OnPreferenceChangeListener { _, newValue ->
                     if (newValue.toString().toIntOrNull() != null && newValue.toString().toInt() > 0) {
                         sharedPref.edit().putInt(getString(R.string.preference_file_key_period), newValue.toString().toInt()).apply()
+                    } else {
+                        Toast.makeText(context, "Количество дней должно быть положительным", Toast.LENGTH_LONG
+                        ).show()
                     }
                     newValue.toString().toIntOrNull() != null && newValue.toString().toInt() > 0
                 }
